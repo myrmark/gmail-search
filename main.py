@@ -14,13 +14,11 @@ import requests
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.modify']
 
 current_year = datetime.datetime.now().year
-
+currency = "SEK"
 accumulated_amount = []
+message_search_string = "Du bad * om pengar"
 
 def readEmails():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
@@ -46,7 +44,7 @@ def readEmails():
     try:
         # Call the Gmail API
         service = build('gmail', 'v1', credentials=creds)
-        results = service.users().messages().list(userId='me', labelIds=['INBOX'], q=f"after:{current_year} subject:Du bad * om pengar from:automated@airbnb.com").execute()
+        results = service.users().messages().list(userId='me', labelIds=['INBOX'], q=f"after:{current_year} subject:{message_search_string} from:automated@airbnb.com").execute()
         messages = results.get('messages',[]);
         if not messages:
             print('No new messages.')
@@ -81,6 +79,6 @@ def readEmails():
         print(f'An error occurred: {error}')
 
     sum_accumulated_amount = sum(accumulated_amount)
-    print(f"Summa för år {current_year}: {sum_accumulated_amount}kr")
+    print(f"Total sum for year {current_year}: {sum_accumulated_amount}{currency}")
 
 readEmails()
