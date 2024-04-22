@@ -19,9 +19,6 @@ accumulated_amount = []
 message_search_string = "Du bad * om pengar"
 
 def readEmails():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -61,20 +58,16 @@ def readEmails():
                             try:
                                 data = part['body']["data"]
                                 byte_code = base64.urlsafe_b64decode(data)
-
                                 text = byte_code.decode("utf-8")
-                                #print ("This is the message: "+ str(text))
+
                                 if "html" not in text:
                                     kr = re.findall(r'\d+', text[0:20])
                                     for i in kr:
                                         accumulated_amount.append(int(i))
-                                    
-                                    
 
-                                # mark the message as read (optional)
-                                msg  = service.users().messages().modify(userId='me', id=message['id'], body={'removeLabelIds': ['UNREAD']}).execute()                                                       
                             except BaseException as error:
-                                pass                            
+                                pass
+                                                          
     except Exception as error:
         print(f'An error occurred: {error}')
 
